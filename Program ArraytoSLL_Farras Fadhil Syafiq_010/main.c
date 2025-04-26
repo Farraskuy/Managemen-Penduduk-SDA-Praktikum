@@ -104,6 +104,18 @@ int main(int argc, char *argv[]) {
         }
 
         if (choice == 7) {
+            int counter = 5;
+            while (counter > 0) {
+                system("cls||clear");
+                printf("======================================================\n");
+                printf("      Terima Kasih Telah Menggunakan Program Ini      \n");
+                printf("======================================================\n");
+                printf(" Keluar aplikasi dalam %d detik ...\n", counter);
+                sleep(1);
+                counter--;
+            }
+            exit(0);
+
             break;
         }
 

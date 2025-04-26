@@ -8,19 +8,20 @@
 #include "linked.h"
 #include "utils.h"
 
-void addWarga(ArrayKota *kota) {
+void addWarga(ListKota *ListKota) {
     printf(" List Kota: \n");
-
-    printKota(*kota);
+    printKota(*ListKota);
 
     printf("======================================================\n");
 
     char *kt = NULL;
     printf(" Masukkan nama kota: ");
     inputString(&kt);
+    
+    Kota *cursor = ListKota->First;
 
-    for (size_t i = 0; i < kota->size; i++) {
-        if (strcmp(kota->kota[i].kt, kt) == 0) {
+    while (cursor != NULL) {
+        if (strcmp(cursor->kt, kt) == 0) {
             char *nm = NULL;
             printf(" Masukkan nama warga: ");
             inputString(&nm);
@@ -35,24 +36,26 @@ void addWarga(ArrayKota *kota) {
             List tempList;
             CreateList(&tempList);
 
-            tempList.First = kota->kota[i].p;
+            tempList.First = cursor->p;
 
             InsertFirst(&tempList, warga);
 
-            kota->kota[i].p = tempList.First;
+            cursor->p = tempList.First;
 
             printf(" Warga %s berhasil ditambahkan ke kota %s\n", nm, kt);
             sleep(1);
             return;
         } 
+
+        cursor = cursor->next;
     }
 
     printf(" Kota %s tidak ditemukan.\n", kt);
     sleep(1);
 }
 
-void editWarga(ArrayKota *arrayKota) {
-    printKota(*arrayKota);
+void editWarga(ListKota *ListKota) {
+    printKota(*ListKota);
 
     char *kt = NULL;
     printf(" Masukkan nama kota: ");
@@ -66,10 +69,12 @@ void editWarga(ArrayKota *arrayKota) {
     printf(" Masukkan nama baru warga: ");
     inputString(&new_nm);
 
-    for (size_t i = 0; i < arrayKota->size; i++) {
-        if (strcmp(arrayKota->kota[i].kt, kt) == 0) {
+    Kota *cursor = ListKota->First;
+
+    while(cursor != NULL) {
+        if (strcmp(cursor->kt, kt) == 0) {
             List list;
-            list.First = arrayKota->kota[i].p;
+            list.First = cursor->p;
 
             address P = Search(list, nm);
 
@@ -82,27 +87,30 @@ void editWarga(ArrayKota *arrayKota) {
             sleep(1);
             return;
         }
+
+        cursor = cursor->next;
     }
 
     printf(" Kota %s tidak ditemukan.\n", kt);
     sleep(1);
 }
 
-void deleteWarga(ArrayKota *arrayKota) {
+void deleteWarga(ListKota *ListKota) {
     printf(" List Kota: \n");
-
-    printKota(*arrayKota);
+    printKota(*ListKota);
 
     printf("======================================================\n");
 
     char *kt = NULL;
     printf(" Masukkan nama kota: ");
     inputString(&kt);
-   
-    for (size_t i = 0; i < arrayKota->size; i++) {
-        if (strcmp(arrayKota->kota[i].kt, kt) == 0) {
 
-            printWarga(arrayKota->kota[i]);
+    Kota *cursor = ListKota->First;
+
+    while (cursor != NULL) {
+        if (strcmp(cursor->kt, kt) == 0) {
+
+            printWarga(*cursor);
             printf("======================================================\n");
 
             char *nm = NULL;
@@ -110,13 +118,13 @@ void deleteWarga(ArrayKota *arrayKota) {
             inputString(&nm);
 
             List list;
-            list.First = arrayKota->kota[i].p;
+            list.First = cursor->p;
 
             address P = Search(list, nm);
             
             if (P != NULL) {
                 List *list;
-                list->First = arrayKota->kota[i].p;
+                list->First = cursor->p;
 
                 DelP(list, nm);
                 printf(" Warga %s berhasil dihapus dari kota %s\n", nm, kt);
@@ -126,6 +134,8 @@ void deleteWarga(ArrayKota *arrayKota) {
             sleep(1);
             return;
         }
+
+        cursor = cursor->next;
     }
 
     printf(" Kota %s tidak ditemukan.\n", kt);
@@ -145,15 +155,21 @@ void printWarga(Kota Kota) {
     }
 }
 
-void printAllWarga(ArrayKota arrayKota) {
-    if (arrayKota.size == 0) {
-        printf(" Tidak ada kota yang terdaftar.\n");
-        return;
+void printAllWarga(ListKota ListKota) {
+    Kota *cursor = ListKota.First;
+    int count = 0;
+    while (cursor != NULL) {
+        printf(" Kota: %s\n", cursor->kt);
+        printWarga(*cursor);
+        count++;
+        cursor = cursor->next;
     }
 
-    for (size_t i = 0; i < arrayKota.size; i++) {
-        printf(" Kota %s:\n", arrayKota.kota[i].kt);
-        printWarga(arrayKota.kota[i]);
+    if (count == 0) {
+        printf(" Tidak ada warga yang terdaftar.\n");
+        sleep(1);
     }
+    
+    
     printf("\n");
 }

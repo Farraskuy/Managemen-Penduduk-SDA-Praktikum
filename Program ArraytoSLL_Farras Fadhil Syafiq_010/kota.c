@@ -13,6 +13,11 @@ void createEmptyKota(ArrayKota *arrayKota) {
 }
 
 void findKota(ArrayKota *kota, char **temp) {
+    printf(" List Kota: \n");
+    printKota(*kota);
+
+    printf("======================================================\n");
+
     char *kt = NULL;
     
     if (*temp == NULL) {
@@ -22,7 +27,8 @@ void findKota(ArrayKota *kota, char **temp) {
         kt = *temp;
     }
     
-    for (size_t i = 0; i < kota->size; i++) {
+    size_t i;
+    for (i = 0; i < kota->size; i++) {
         if (strcmp(kota->kota[i].kt, kt) == 0) {
             printf(" Kota %s ditemukan\n", kt);
             printWarga(kota->kota[i]);
@@ -63,7 +69,8 @@ void updateKota(ArrayKota *kota) {
     printf(" Masukkan nama kota baru: ");
     inputString(&new_kt);
 
-    for (size_t i = 0; i < kota->size; i++) {
+	size_t i;
+    for (i = 0; i < kota->size; i++) {
         if (strcmp(kota->kota[i].kt, kt) == 0) {
             free(kota->kota[i].kt);
             kota->kota[i].kt = strdup(new_kt);
@@ -82,7 +89,8 @@ void deleteKota(ArrayKota *kota) {
     printf(" Masukkan nama kota yang ingin dihapus: ");
     inputString(&kt);
 
-    for (size_t i = 0; i < kota->size; i++) {
+	size_t i;
+    for (i = 0; i < kota->size; i++) {
         if (strcmp(kota->kota[i].kt, kt) == 0) {
             free(kota->kota[i].kt);
             
@@ -91,18 +99,23 @@ void deleteKota(ArrayKota *kota) {
             DelAll(&list);
             kota->kota[i].p = NULL;
 
-            for (size_t j = i; j < kota->size - 1; j++) {
+			size_t j;
+            for (j = i; j < kota->size - 1; j++) {
                 kota->kota[j] = kota->kota[j + 1];
             }
             kota->size--;
             kota->kota = realloc(kota->kota, kota->size * sizeof(Kota));
-            break;
+
+            printf(" Kota %s berhasil dihapus\n", kt);
+            sleep(1);
+            return;
         }
     }
 }
 
 void printKota(ArrayKota kota) {
-    for (size_t i = 0; i < kota.size; i++) {
+	size_t i;
+    for (i = 0; i < kota.size; i++) {
         printf("%d. %s\n", i + 1, kota.kota[i].kt);
     }
 }
